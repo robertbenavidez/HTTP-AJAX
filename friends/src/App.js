@@ -2,13 +2,15 @@ import React from 'react';
 import axios from 'axios';
 
 import FriendsList from './components/FriendsList';
-import Friend from './components/Friend';
+import FriendForm from './components/FriendForm';
+//import Friend from './components/Friend';
 import './App.css';
 
 class App extends React.Component {
   state = {
     friends: [],
-    error: ''
+    error: '',
+    activeFriend: null
   }
   componentDidMount(){
     axios
@@ -16,12 +18,34 @@ class App extends React.Component {
       .then(res => this.setState({friends: res.data}))
       .catch(err => this.setState({error: err}))
   }
+
+  addFriend = (e, friend) => {
+    e.preventDefault();
+    axios
+      .post('http://localhost:5000/friends', friend)
+      .then(res => this.setState( {friends: res.data}))
+      .catch(err => console.log(err))
+}
+
+updateFriend = (e, friend) => {
+  e.preventDefault();
+  axios 
+    .put(`http://localhost:5000/friend/${friend.id}`, friend)
+    .then(res => this.setState({ friends: res.data }))
+    .catch(err => console.log(err))
+}
+
+setUpdateForm = (e, friend) => {
+  e.preventDefault();
+  this.setState({ activeFriend: friend})
+}
   
   render() {
     return (
       <div className="App">
         <h2>Friends List</h2>
-        <FriendsList friends friends={this.state.friends} />
+        <FriendForm addFriend={this.addFriend} updateFriend={this.updateFriend} activeFriend={this.state.activeFriend}  />
+        <FriendsList friends={this.state.friends} />
       </div>
     );
   }
