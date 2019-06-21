@@ -4,7 +4,7 @@ export default class FriendForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            friend: {
+            friend: this.props.activeFriend || {
                 name: '',
                 age: '',
                 email: '',

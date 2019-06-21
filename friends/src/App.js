@@ -35,6 +35,14 @@ updateFriend = (e, friend) => {
     .catch(err => console.log(err))
 }
 
+deleteFriend = (e, id) => {
+  e.preventDefault();
+  axios
+    .delete(`http://localhost:5000/friends/${id}`)
+    .then(res => this.setState({ friends: res.data}))
+    .catch(err => console.log(err))
+}
+
 setUpdateForm = (e, friend) => {
   e.preventDefault();
   this.setState({ activeFriend: friend})
@@ -45,7 +53,7 @@ setUpdateForm = (e, friend) => {
       <div className="App">
         <h2>Friends List</h2>
         <FriendForm addFriend={this.addFriend} updateFriend={this.updateFriend} activeFriend={this.state.activeFriend}  />
-        <FriendsList friends={this.state.friends} />
+        <FriendsList setUpdateForm={this.setUpdateForm} deleteFriend={this.deleteFriend} friends={this.state.friends} />
       </div>
     );
   }
